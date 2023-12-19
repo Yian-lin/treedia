@@ -1,7 +1,47 @@
+
+#' Prepare the input data frame for plot_tree_diagram()
+#'
+#' @param X_dist Specify distribution of level 1 variable. X_dist can be "Pois",
+#' "Geo", "Bin", or "NegBin". If you want X_dist to be Bernoulli distribution,
+#' please specify X_dist to be "Bin" because Bernoulli is just
+#' a special case of Binomial distribution.
+#'
+#' @param X_parameters a vector containing the parameters for X_dist.
+#' @param X_low_q the left quantile of X. Used to determine the minimum value of
+#'  X to be included in the tree diagram.
+#' @param X_high_q the right quantile of X. Used to determine the maximum value of
+#'  X to be included in the tree diagram.
+#' @param Y_given_X_dist Specify distribution of level 2 variable. Y_given_X_dist
+#' can be "Pois", "Geo", "Bin", or "NegBin". If you want Y_given_X_dist to be
+#' Bernoulli distribution, please specify Y_given_X_dist to be "Bin" because Bernoulli
+#' is just a special case of Binomial distribution.
+#' @param Y_parameters a vector containing parameter(s) for Y_given_X_dist.
+#' Can use a string to express the relationship between any parameter and the level 1 variable X.
+#' For example, if Y|X ~ Bern(1/X), then Y_given_X_dist = "Bin", Y_parameters = c(1,"1/X");
+#' @param Y_low_q the left quantile of Y|X=x. Used to determine the minimum value of
+#'  Y to be included in the tree diagram given a specific value of X.
+#' @param Y_high_q the right quantile of Y|X=x. Used to determine the maximum value of
+#'  Y to be included in the tree diagram given a specific value of X.
+#'
+#' @return a data frame that can be used as the input df to the plot_tree_diagram().
+#' @export
+#'
+#' @examples
+#' #For X~Poisson(3)
+#' test_df <- prepare_df(X_dist="Pois", X_parameters= c(3))
+#'
+#' #for X~NegBin(2,0.6), Y|X ~ Bern(1/X)
+#' test_df <- prepare_df(X_dist="NegBin", X_parameters= c(2,0.6),
+#'                       Y_given_X_dist="Bin", Y_parameters = c(1,"1/X"))
+#'
+#' #for X~Poisson(2), Y|X ~ Bin(X,1/X)
+#' test_df <- prepare_df(X_dist="Pois", X_parameters= c(2),
+#'           Y_given_X_dist="Bin", Y_parameters = c("X","1/X"))
+
 prepare_df <- function(X_dist, X_parameters, X_low_q=0.01, X_high_q=0.99,
                        Y_given_X_dist=NULL, Y_parameters, Y_low_q=0.1, Y_high_q=0.9){
-  ## Returns a data.frame that can be used as the input df to the plot_tree_diagram()
-  # X_parameters: a vector containing the parameters for X_dist.
+  ## Returns a data frame that can be used as the input df to the plot_tree_diagram()
+  # X_parameters:
   # X_low_q: the left quantile of X. Used to determine the min of possible values
   #          of X that will be included in the tree diagram.
   # X_high_q: the right quantile of X. Used to determine the max of possible values

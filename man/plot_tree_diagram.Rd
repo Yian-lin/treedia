@@ -31,7 +31,8 @@ from left to right. It can also be "TB" (top to bottom), "BT" (bottom to top), "
 
 \item{remove_0}{Logical. Set to TRUE if we don't want to show leaves/paths with joint probability=0.}
 
-\item{edge_p_digits}{Positive integer indicating the number of decimal places to be}
+\item{edge_p_digits}{Positive integer indicating the number of decimal places to be
+used when rounding probabilities on edges of the tree. The default value is 3.}
 
 \item{joint_p_digits}{positive integer indicating the number of decimal places to be
 used when rounding joint probabilities. The default value is 5.}
@@ -59,8 +60,33 @@ plot_tree_diagram(Monty_hall, root_name="Monty Hall", remove_0 = FALSE)
 test_df <- prepare_df(X_dist="Pois", X_parameters= c(3))
 plot_tree_diagram(test_df,root_name="X")
 
+#plot for X~Poisson(3), Y|X ~ Bern(1/X)
+test_df <- prepare_df(X_dist="Pois", X_parameters= c(3),
+                      Y_given_X_dist="Bin", Y_parameters = c(1,"1/X"))
+plot_tree_diagram(test_df, root_name="Tree")
+
+#plot for X~Poisson(3), Y|X ~ Bin(3,1/X)
+test_df <- prepare_df(X_dist="Pois", X_parameters= c(3),
+                      Y_given_X_dist="Bin", Y_parameters = c(3,"1/X"))
+plot_tree_diagram(test_df, root_name="Tree")
+
+#plot for X~Poisson(2), Y|X ~ Bin(X,1/X)
+test_df <- prepare_df(X_dist="Pois", X_parameters= c(2),
+                      Y_given_X_dist="Bin", Y_parameters = c("X","1/X"))
+plot_tree_diagram(test_df, root_name="Tree")
+
 #plot for X~NegBin(2,0.6), Y|X ~ Bern(1/X)
 test_df <- prepare_df(X_dist="NegBin", X_parameters= c(2,0.6),
+                      Y_given_X_dist="Bin", Y_parameters = c(1,"1/X"))
+plot_tree_diagram(test_df, root_name="X")
+
+#plot for X~Bern(0.6), Y|X ~ Pois(X+1)
+test_df <- prepare_df(X_dist="Bin", X_parameters= c(1,0.6),
+                      Y_given_X_dist="Pois", Y_parameters = c("X+1"))
+plot_tree_diagram(test_df, root_name="X")
+
+#plot for X~Geo(0.6), Y|X ~ Bern(1/X)
+test_df <- prepare_df(X_dist="Geo", X_parameters= c(0.6),
                       Y_given_X_dist="Bin", Y_parameters = c(1,"1/X"))
 plot_tree_diagram(test_df, root_name="X")
 }
